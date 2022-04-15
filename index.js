@@ -1,0 +1,1 @@
+console.log("Hello, masadamsahid! \nLet's start building the API so you can graduate faster \nYour mom and dad crying on your tution fee :')")
