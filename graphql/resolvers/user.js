@@ -1,12 +1,22 @@
 import {UserInputError} from 'apollo-server'
 import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
 
 import User from "../../models/User.js";
 import {validateRegisterInput} from '../../utils/validators.js'
 
 dotenv.config()
-const salt = parseInt(process.env.HASH_SALT)
+const SALT = parseInt(process.env.HASH_SALT)
+const SECRETE_KEY = process.env.SECRET_KEY
+
+function generateToken({ id, username, email }){
+  return jwt.sign(
+    { id, username, email },
+    SECRETE_KEY,
+    { expiresIn: "30 days"}
+    )
+}
 
 const userResolvers = {
   Mutation: {
@@ -30,7 +40,7 @@ const userResolvers = {
       }
 
       // TODO: encrypt the password
-      password = await bcrypt.hash(password, salt)
+      password = await bcrypt.hash(password, SALT)
 
       // TODO: make new user and save to MONGODB
       const newUser = new User({
@@ -41,10 +51,14 @@ const userResolvers = {
       })
 
       const res = await newUser.save()
-      console.log(res)
       // TODO: Generate JWT
+      const token = generateToken(res)
 
-      return {}
+      return {
+        ...res._doc,
+        id: res._id,
+        token
+      }
     }
   }
 }
