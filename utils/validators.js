@@ -2,8 +2,8 @@ export const validateRegisterInput = (username, email, password, confirmPassword
   const errors = {}
 
   // USERNAME VALIDATION
-  if (username.length < 6 || username.trim() === ''){
-    errors.username = 'Username must contain min 6 characters'
+  if (username.length < 4 || username.trim() === ''){
+    errors.username = 'Username must contain min 4 characters'
   }else {
     const usernameRegex = /^[a-zA-Z0-9]+$/;
     if (!username.match(usernameRegex)){
