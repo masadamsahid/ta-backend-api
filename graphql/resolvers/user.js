@@ -31,9 +31,17 @@ const userResolvers = {
 
       // TODO: encrypt the password
       password = await bcrypt.hash(password, salt)
-      console.log(password)
 
       // TODO: make new user and save to MONGODB
+      const newUser = new User({
+        username,
+        email,
+        password,
+        about
+      })
+
+      const res = await newUser.save()
+      console.log(res)
       // TODO: Generate JWT
 
       return {}
