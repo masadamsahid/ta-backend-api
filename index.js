@@ -2,20 +2,9 @@ import {ApolloServer, gql} from 'apollo-server'
 import mongoose from "mongoose"
 import  dotenv from 'dotenv'
 
-// import typeDefs from './graphql/typeDefs.js'
-// import resolvers from './graphql/resolvers/index.js'
+import typeDefs from './graphql/typeDefs.js'
+import resolvers from './graphql/resolvers/index.js'
 
-const typeDefs = gql`
-  type Query{
-      sayHi: String!
-  }
-`
-
-const resolvers = {
-  Query: {
-    sayHi: () => "Hello HI!"
-  }
-}
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
