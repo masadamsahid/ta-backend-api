@@ -7,7 +7,7 @@
     "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "masadamsahid",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.6.7",
@@ -17,6 +17,8 @@
     "mongoose": "^6.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
-  }
+    "nodemon": "^2.0.15",
+    "dotenv": "^16.0.0"
+  },
+  "type": "module"
 }
