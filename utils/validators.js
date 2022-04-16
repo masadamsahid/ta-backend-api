@@ -12,7 +12,7 @@ export const validateRegisterInput = (username, email, password, confirmPassword
   }
 
   // EMAIL ADRESS VALIDATION
-  if(email.length() <= 0 || email.trim() === ''){
+  if(email.length <= 0 || email.trim() === ''){
     errors.email = 'Email must not be empty'
   }else {
     const emailRegEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
