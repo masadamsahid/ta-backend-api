@@ -47,7 +47,8 @@ const userResolvers = {
         username,
         email,
         password,
-        about
+        about,
+        createdAt: new Date().toISOString()
       })
 
       const res = await newUser.save()
@@ -63,7 +64,7 @@ const userResolvers = {
     async login(proxy, {usernameEmail, password}) {
 
       // Validate user login data
-      const {valid, errors} = validateLoginInput(usernameEmail, email)
+      const {valid, errors} = validateLoginInput(usernameEmail, password)
       if (!valid) {
         throw new UserInputError('Errors', {errors})
       }
@@ -78,7 +79,7 @@ const userResolvers = {
       }
 
       // TODO: CHECK USER PASSWORD
-      const match = await bcrypt.compare(password)
+      const match = await bcrypt.compare(password, user.password)
       if (!match){
         errors.general = 'Wrong credentials'
         throw new UserInputError('Wrong credentials', {errors})
