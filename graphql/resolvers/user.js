@@ -64,6 +64,9 @@ const userResolvers = {
 
       // Validate user login data
       const { valid, errors } = validateLoginInput(usernameEmail, email)
+      if(!valid){
+        throw new UserInputError('Errors', {errors})
+      }
 
       // TODO: FIND USER BY USERNAME OR EMAIL ADDRESS
       // TODO: HANDLE IF USER IS NOT FOUND
