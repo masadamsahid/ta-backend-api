@@ -10,12 +10,12 @@ dotenv.config()
 const SALT = parseInt(process.env.HASH_SALT)
 const SECRETE_KEY = process.env.SECRET_KEY
 
-function generateToken({ id, username, email }){
+function generateToken({id, username, email}) {
   return jwt.sign(
-    { id, username, email },
+    {id, username, email},
     SECRETE_KEY,
-    { expiresIn: "30 days"}
-    )
+    {expiresIn: "30 days"}
+  )
 }
 
 const userResolvers = {
@@ -60,16 +60,23 @@ const userResolvers = {
         token
       }
     },
-    async login (proxy, {usernameEmail, email}){
+    async login(proxy, {usernameEmail, email}) {
 
       // Validate user login data
-      const { valid, errors } = validateLoginInput(usernameEmail, email)
-      if(!valid){
+      const {valid, errors} = validateLoginInput(usernameEmail, email)
+      if (!valid) {
         throw new UserInputError('Errors', {errors})
       }
 
       // TODO: FIND USER BY USERNAME OR EMAIL ADDRESS
+      const user = await User.findOne({$or: [{username: usernameEmail}, {email: usernameEmail}]})
+
       // TODO: HANDLE IF USER IS NOT FOUND
+      if (!user) {
+        errors.general = 'User not found'
+        throw new UserInputError('Errors', {errors})
+      }
+
       // TODO: CHECK USER PASSWORD
       // TODO: GENERATE A JSON WEB TOKEN IF USERNAME-EMAIL AND PASSWORD VALID
     }
