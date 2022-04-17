@@ -34,8 +34,18 @@ export const validateRegisterInput = (username, email, password, confirmPassword
   }
 }
 
-export const validateLoginInput = () => {
+export const validateLoginInput = (username, password) => {
   const errors = {}
+
+  // TODO: USERNAME-EMAIL VALIDATION
+  if (username.length < 1 || username.trim() === ''){
+    errors.username = 'Username must not be empty'
+  }
+
+  // TODO: VALIDATE PASSWORD
+  if (username.password){
+    errors.password = 'Password must not be empty'
+  }
 
   return {
     errors,

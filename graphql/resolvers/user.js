@@ -64,6 +64,11 @@ const userResolvers = {
 
       // Validate user login data
       const { valid, errors } = validateLoginInput(usernameEmail, email)
+
+      // TODO: FIND USER BY USERNAME OR EMAIL ADDRESS
+      // TODO: HANDLE IF USER IS NOT FOUND
+      // TODO: CHECK USER PASSWORD
+      // TODO: GENERATE A JSON WEB TOKEN IF USERNAME-EMAIL AND PASSWORD VALID
     }
   }
 }
