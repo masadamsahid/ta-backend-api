@@ -60,7 +60,7 @@ const userResolvers = {
         token
       }
     },
-    async login(proxy, {usernameEmail, email}) {
+    async login(proxy, {usernameEmail, password}) {
 
       // Validate user login data
       const {valid, errors} = validateLoginInput(usernameEmail, email)
@@ -78,6 +78,12 @@ const userResolvers = {
       }
 
       // TODO: CHECK USER PASSWORD
+      const match = await bcrypt.compare(password)
+      if (!match){
+        errors.general = 'Wrong credentials'
+        throw new UserInputError('Wrong credentials', {errors})
+      }
+
       // TODO: GENERATE A JSON WEB TOKEN IF USERNAME-EMAIL AND PASSWORD VALID
     }
   }
