@@ -85,6 +85,13 @@ const userResolvers = {
       }
 
       // TODO: GENERATE A JSON WEB TOKEN IF USERNAME-EMAIL AND PASSWORD VALID
+      const token = generateToken(user);
+
+      return {
+          ...user._doc,
+        id: user._id,
+        token
+      };
     }
   }
 }
