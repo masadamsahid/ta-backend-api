@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
 import User from "../../models/User.js";
-import {validateRegisterInput} from '../../utils/validators.js'
+import {validateLoginInput, validateRegisterInput} from '../../utils/validators.js'
 
 dotenv.config()
 const SALT = parseInt(process.env.HASH_SALT)
@@ -59,6 +59,11 @@ const userResolvers = {
         id: res._id,
         token
       }
+    },
+    async login (proxy, {usernameEmail, email}){
+
+      // Validate user login data
+      const { valid, errors } = validateLoginInput(usernameEmail, email)
     }
   }
 }

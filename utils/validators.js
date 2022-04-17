@@ -33,3 +33,12 @@ export const validateRegisterInput = (username, email, password, confirmPassword
     valid: Object.keys(errors) < 1,
   }
 }
+
+export const validateLoginInput = () => {
+  const errors = {}
+
+  return {
+    errors,
+    valid: Object.keys(errors) < 1
+  }
+}
