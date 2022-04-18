@@ -1,8 +1,9 @@
+import checkAuth from "../../utils/checkAuth.js";
 
 
 const courseResolvers = {
   Mutation: {
-    async createCourse(proxy , {courseCode, title, tutor, description, price}) {
+    async createCourse(proxy , {courseCode, title, tutor, description, price}, context) {
 
       /*TODO:
        * 1. Check loginAuth
@@ -10,6 +11,8 @@ const courseResolvers = {
        * 3. Check User's role
        * 4. Throw an Error if the role is not admin or tutor
        */
+      const user = checkAuth(context)
+      console.log(user)
 
       /*TODO:
        * 1. Check Course with courseCode already exists or not
