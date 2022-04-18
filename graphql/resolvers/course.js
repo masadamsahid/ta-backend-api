@@ -1,4 +1,4 @@
-import {UserInputError} from "apollo-server";
+import {ForbiddenError, UserInputError} from "apollo-server";
 
 import checkAuth from "../../utils/checkAuth.js";
 import Course from "../../models/Course.js  ";
@@ -15,10 +15,14 @@ const courseResolvers = {
        * 4. Throw an Error if the role is not admin or tutor
        */
       const user = checkAuth(context)
+      console.log(user)
+      if(!(user.role === "admin" || user.role === "tutor")){
+        throw new ForbiddenError('Unauthorized to do this action! Please contact admin!')
+      }
 
       /*TODO:
-       * 1. Check Course with courseCode already exists or not
-       * 2. Handle if Course already exists by throwing an Error
+       * 1. Check Course with courseCode already exists or not (NICE! COMPLETED ✔)
+       * 2. Handle if Course already exists by throwing an Error (NICE! COMPLETED ✔)
        */
       const course = await Course.findOne({courseCode})
       if (course){
@@ -30,8 +34,8 @@ const courseResolvers = {
       }
 
       /*TODO:
-       * 1. Create a new Course
-       * 2. Save the new Course
+       * 1. Create a new Course (NICE! COMPLETED ✔)
+       * 2. Save the new Course (NICE! COMPLETED ✔)
        */
       const newCourse = new Course({
         courseCode,
@@ -44,7 +48,7 @@ const courseResolvers = {
       })
       const res = await newCourse.save()
 
-      /*TODO: Return response
+      /*TODO: Return response (NICE! COMPLETED ✔)
        */
       return {
         ...res._doc,
