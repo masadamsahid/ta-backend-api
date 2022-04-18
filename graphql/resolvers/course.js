@@ -1,3 +1,5 @@
+import {UserInputError} from "apollo-server";
+
 import checkAuth from "../../utils/checkAuth.js";
 import Course from "../../models/Course.js  ";
 
@@ -18,12 +20,20 @@ const courseResolvers = {
        * 1. Check Course with courseCode already exists or not
        * 2. Handle if Course already exists by throwing an Error
        */
+      const course = await Course.findOne({courseCode})
+      if (course){
+        throw new UserInputError('Course code already taken', {
+          errors: {
+            courseCode: 'This course code is taken'
+          }
+        })
+      }
 
       /*TODO:
        * 1. Create a new Course
        * 2. Save the new Course
        */
-      const course = new Course({
+      const newCourse = new Course({
         courseCode,
         title,
         tutor,
@@ -32,7 +42,7 @@ const courseResolvers = {
         salesCount: 0,
         createdAt: new Date().toISOString()
       })
-      const res = await course.save()
+      const res = await newCourse.save()
 
       /*TODO: Return response
        */
