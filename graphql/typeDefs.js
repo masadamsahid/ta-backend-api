@@ -51,6 +51,7 @@ const typeDefs = gql`
             description: String,
             price: Float,
         ): Course!
+        deleteCourse(courseCode: String): String!
         addTopic(
             courseCode: String,
             topicTitle: String,

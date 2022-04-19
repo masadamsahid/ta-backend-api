@@ -54,6 +54,30 @@ const courseResolvers = {
         ...res._doc,
         id: res._id,
       }
+    },
+    async deleteCourse(proxy, {courseCode}, context){
+
+      /*TODO:
+       * 1. Check user auth
+       * 2. Check user's role
+       * 3. Check if username is course tutor or not
+       * */
+
+      const user = checkAuth(context)
+
+      try {
+        const course = await Course.findOne({courseCode})
+
+        if(user.username === course.tutor || user.role === 'admin'){
+          await course.delete();
+          return "Course successfully deleted"
+        }else {
+          throw new ForbiddenError('Unauthorized to do this action')
+        }
+      }catch (err){
+        throw new Error(err)
+      }
+
 
     }
   }
