@@ -5,7 +5,16 @@ const courseSchema = new mongoose.Schema({
   title: String,
   tutor: String,
   description: String,
-  topics: [String],
+  topics: {type :[
+      {
+        topicTitle: String,
+        orderNo: Number,
+        videoUrl: String,
+        body: String,
+        lastUpdated: String,
+        createdAt: String
+      }
+    ], default: []},
   price: Number,
   salesCount: Number,
   createdAt: String

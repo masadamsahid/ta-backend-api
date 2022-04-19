@@ -1,13 +1,22 @@
 import {gql} from "apollo-server";
 
 const typeDefs = gql`
+    type Topic{
+        id: ID!
+        topicTitle: String!
+        orderNo: Int!
+        videoUrl: String!
+        body: String!
+        lastUpdated: String!
+        createdAt: String!
+    }
     type Course{
         id: ID!
         courseCode: String!
         title: String!
         tutor: String!
         description: String!
-        topics: [String]!
+        topics: [Topic]!
         price: Int!
         salesCount: Int!
         createdAt: String!
@@ -41,6 +50,13 @@ const typeDefs = gql`
             tutor: String,
             description: String,
             price: Float,
+        ): Course!
+        addTopic(
+            courseCode: String,
+            topicTitle: String,
+            orderNo: Int,
+            videoUrl: String,
+            body: String,
         ): Course!
     }
 `
