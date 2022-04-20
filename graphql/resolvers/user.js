@@ -1,10 +1,11 @@
-import {UserInputError} from 'apollo-server'
+import {ForbiddenError, UserInputError} from 'apollo-server'
 import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
 import User from "../../models/User.js";
 import {validateLoginInput, validateRegisterInput} from '../../utils/validators.js'
+import checkAuth from "../../utils/checkAuth.js";
 
 dotenv.config()
 const SALT = parseInt(process.env.HASH_SALT)
@@ -94,6 +95,28 @@ const userResolvers = {
         id: user._id,
         token
       };
+    },
+    async changeUserRole(proxy, {targetUsername, changeRoleTo}, context){
+
+      const user = checkAuth(context)
+
+      /*TODO:
+       * User
+       */
+      if (user.role !== "admin"){
+        throw new ForbiddenError('Unauthorized to do this action')
+      }
+
+      const targetUser = await User.findOne({username: targetUsername})
+
+      targetUser.role = changeRoleTo
+
+      const res = await targetUser.save()
+
+      return {
+        ...res._doc,
+        id: res._id
+      }
     }
   }
 }
