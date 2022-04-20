@@ -10,9 +10,9 @@ dotenv.config()
 const SALT = parseInt(process.env.HASH_SALT)
 const SECRETE_KEY = process.env.SECRET_KEY
 
-function generateToken({id, username, email}) {
+function generateToken({id, username, email, role}) {
   return jwt.sign(
-    {id, username, email},
+    {id, username, email, role},
     SECRETE_KEY,
     {expiresIn: "30 days"}
   )
@@ -48,6 +48,7 @@ const userResolvers = {
         email,
         password,
         about,
+        role: "member",
         createdAt: new Date().toISOString()
       })
 
