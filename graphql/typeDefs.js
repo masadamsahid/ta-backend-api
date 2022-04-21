@@ -40,6 +40,7 @@ const typeDefs = gql`
     }
     type Query{
         sayHi: String!
+        getUsers(page: Int, pageSize: Int, ):[User]
     }
     type Mutation {
         register(registerInput: RegisterInput): User!

@@ -4,7 +4,8 @@ import topicResolvers from "./topic.js";
 
 const resolvers = {
   Query: {
-    sayHi: () => "Hello HI!"
+    ...userResolvers.Query,
+    sayHi: () => "Hello HI!",
   },
   Mutation: {
     ...userResolvers.Mutation,

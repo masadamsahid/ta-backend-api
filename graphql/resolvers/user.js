@@ -20,6 +20,17 @@ function generateToken({id, username, email, role}) {
 }
 
 const userResolvers = {
+  Query: {
+    async getUsers(parent, {page, pageSize}){
+
+      try{
+        const users = await User.find({}).sort({createdAt: 1}).skip((page-1) * pageSize).limit(pageSize);
+        return users
+      }catch (err) {
+        throw new Error(err);
+      }
+    }
+  },
   Mutation: {
     async register(proxy, {registerInput: {username, email, password, confirmPassword, about}}) {
 
