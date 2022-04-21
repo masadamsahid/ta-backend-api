@@ -121,14 +121,14 @@ const userResolvers = {
 
       const user = checkAuth(context)
 
-      /*TODO:
-       * User
-       */
       if (user.role !== "admin"){
         throw new ForbiddenError('Unauthorized to do this action')
       }
 
       const targetUser = await User.findOne({username: targetUsername})
+      if (targetUser.role === "admin"){
+        throw new ForbiddenError('You can\'t change admin\'s role' )
+      }
 
       targetUser.role = changeRoleTo
 
