@@ -42,11 +42,15 @@ const typeDefs = gql`
         sayHi: String!
         getUsers(page: Int, pageSize: Int, ):[User],
         getUser(username: String): User
+        
+        getCourses(page: Int, pageSize: Int):[Course]
+        getCourse(courseCode: String): Course
     }
     type Mutation {
         register(registerInput: RegisterInput): User!
         login(usernameEmail: String, password: String): User!
         changeUserRole(targetUsername:String, changeRoleTo:String): User!
+        
         createCourse(
             courseCode: String,
             title: String,

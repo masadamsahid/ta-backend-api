@@ -5,6 +5,7 @@ import topicResolvers from "./topic.js";
 const resolvers = {
   Query: {
     ...userResolvers.Query,
+    ...courseResolvers.Query,
     sayHi: () => "Hello HI!",
   },
   Mutation: {

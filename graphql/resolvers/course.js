@@ -5,6 +5,29 @@ import Course from "../../models/Course.js  ";
 
 
 const courseResolvers = {
+  Query:{
+    async getCourses(parent, {page, pageSize}){
+
+      try{
+        console.log("aa")
+        const courses = await Course.find({}).sort({createdAt: 1}).skip((page-1) * pageSize).limit(pageSize);
+        return courses
+      }catch (err) {
+        throw new Error(err)
+      }
+    },
+    async getCourse(parent, {courseCode}){
+      try {
+        const course = await Course.findOne({courseCode})
+        if (!course){
+          throw new Error('Course not found')
+        }
+        return course
+      }catch (err) {
+        throw new Error(err)
+      }
+    }
+  },
   Mutation: {
     async createCourse(proxy , {courseCode, title, tutor, description, price}, context) {
 
@@ -15,7 +38,6 @@ const courseResolvers = {
        * 4. Throw an Error if the role is not admin or tutor
        */
       const user = checkAuth(context)
-      console.log(user)
       if(!(user.role === "admin" || user.role === "tutor")){
         throw new ForbiddenError('Unauthorized to do this action! Please contact admin!')
       }
