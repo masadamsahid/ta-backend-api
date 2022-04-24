@@ -31,6 +31,8 @@ const typeDefs = gql`
         token: String!
         createdAt: String!
     }
+    type Users { data: [User], count: Int!}
+    type Courses { data: [Course], count: Int!}
     input RegisterInput{
         username: String!
         email: String!
@@ -40,10 +42,10 @@ const typeDefs = gql`
     }
     type Query{
         sayHi: String!
-        getUsers(page: Int, pageSize: Int, ):[User],
+        getUsers(page: Int, pageSize: Int, ): Users,
         getUser(username: String): User
         
-        getCourses(page: Int, pageSize: Int):[Course]
+        getCourses(page: Int, pageSize: Int): Courses
         getCourse(courseCode: String): Course
     }
     type Mutation {

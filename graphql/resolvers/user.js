@@ -24,7 +24,11 @@ const userResolvers = {
     async getUsers(parent, {page, pageSize}){
       try{
         const users = await User.find({}).sort({createdAt: 1}).skip((page-1) * pageSize).limit(pageSize);
-        return users
+        const count = await User.find({}).sort({createdAt: 1}).count()
+        return {
+          data: users,
+          count: count
+        }
       }catch (err) {
         throw new Error(err);
       }

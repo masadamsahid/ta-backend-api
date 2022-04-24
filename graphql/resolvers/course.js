@@ -9,9 +9,12 @@ const courseResolvers = {
     async getCourses(parent, {page, pageSize}){
 
       try{
-        console.log("aa")
         const courses = await Course.find({}).sort({createdAt: 1}).skip((page-1) * pageSize).limit(pageSize);
-        return courses
+        const count = await Course.find({}).sort({createdAt: 1}).count()
+        return {
+          count: count,
+          data: courses,
+        }
       }catch (err) {
         throw new Error(err)
       }
