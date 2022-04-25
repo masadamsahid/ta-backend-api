@@ -25,10 +25,10 @@ const typeDefs = gql`
         id: ID!
         username: String!
         email: String!
-        password: String!
         role: String!
         about: String!
         token: String!
+        lastUpdate: String!
         createdAt: String!
     }
     type Users { data: [User], count: Int!}
@@ -52,6 +52,7 @@ const typeDefs = gql`
         register(registerInput: RegisterInput): User!
         login(usernameEmail: String, password: String): User!
         changeUserRole(targetUsername:String, changeRoleTo:String): User!
+        editSelfUserProfile(id: String, about: String): User
         
         createCourse(
             courseCode: String,

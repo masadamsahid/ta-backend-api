@@ -46,7 +46,7 @@ const userResolvers = {
     }
   },
   Mutation: {
-    async register(proxy, {registerInput: {username, email, password, confirmPassword, about}}) {
+    async register(_, {registerInput: {username, email, password, confirmPassword, about}}) {
 
       // Validate user registration data
       const {valid, errors} = validateRegisterInput(username, email, password, confirmPassword);
@@ -88,7 +88,7 @@ const userResolvers = {
         token
       }
     },
-    async login(proxy, {usernameEmail, password}) {
+    async login(_, {usernameEmail, password}) {
 
       // Validate user login data
       const {valid, errors} = validateLoginInput(usernameEmail, password)
@@ -121,7 +121,7 @@ const userResolvers = {
         token
       };
     },
-    async changeUserRole(proxy, {targetUsername, changeRoleTo}, context){
+    async changeUserRole(_, {targetUsername, changeRoleTo}, context){
 
       const user = checkAuth(context)
 
@@ -142,7 +142,29 @@ const userResolvers = {
         ...res._doc,
         id: res._id
       }
-    }
+    },
+    async editSelfUserProfile(_, {id, about}, context){
+
+      // Editor Auth
+      const editor = checkAuth(context)
+
+      if(editor.id !== id){
+        throw new ForbiddenError('Unauthorized to do this action')
+      }
+
+      try {
+        const user = await User.findOne({id})
+
+        user.about = about
+        user.lastUpdate = new Date().toISOString()
+        await user.save()
+
+        return user;
+      }catch (err) {
+        throw new Error(err)
+      }
+
+    },
   }
 }
 
