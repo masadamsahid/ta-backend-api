@@ -33,6 +33,19 @@ const typeDefs = gql`
     }
     type Users { data: [User], count: Int!}
     type Courses { data: [Course], count: Int!}
+    type CourseOrder {
+        id: ID
+        orderId: String
+        midtransToken: String
+        redirectUrl: String
+        userId: ID
+        courseId: ID
+        amount: Float
+        midtransStatus: String
+        accessToCourse: Boolean
+        updatedAt: String
+        createdAt: String
+    }
     input RegisterInput{
         username: String!
         email: String!
@@ -47,6 +60,8 @@ const typeDefs = gql`
         
         getCourses(page: Int, pageSize: Int): Courses
         getCourse(courseCode: String): Course
+        
+        getCourseOrder(orderId: String): CourseOrder
     }
     type Mutation {
         register(registerInput: RegisterInput): User!
@@ -69,6 +84,8 @@ const typeDefs = gql`
             videoUrl: String,
             body: String,
         ): Course!
+        
+        createCourseOrder(courseCode: String) : CourseOrder
     }
 `
 

@@ -3,7 +3,10 @@ import mongoose from "mongoose";
 const courseSchema = new mongoose.Schema({
   courseCode: String,
   title: String,
-  tutor: String,
+  tutor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   description: String,
   topics: {type :[
       {

@@ -32,7 +32,7 @@ const courseResolvers = {
     }
   },
   Mutation: {
-    async createCourse(proxy , {courseCode, title, tutor, description, price}, context) {
+    async createCourse(_ , {courseCode, title, tutor, description, price}, context) {
 
       /*TODO:
        * 1. Check loginAuth (NICE! COMPLETED ✔)
@@ -80,7 +80,7 @@ const courseResolvers = {
         id: res._id,
       }
     },
-    async deleteCourse(proxy, {courseCode}, context){
+    async deleteCourse(_, {courseCode}, context){
 
       /*TODO:
        * 1. Check user auth
@@ -104,7 +104,7 @@ const courseResolvers = {
       }
 
 
-    }
+    },
   }
 }
 
