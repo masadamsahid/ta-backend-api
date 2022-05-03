@@ -42,7 +42,7 @@ const typeDefs = gql`
         courseId: ID
         amount: Float
         midtransStatus: String
-        accessToCourse: Boolean
+        courseAccess: Boolean
         updatedAt: String
         createdAt: String
     }

@@ -17,8 +17,9 @@ const snap = new midtransClient.Snap({
 });
 
 const verifyMidtransStatus  = (orderId) => {
-  snap.transaction.status(orderId)
+  return snap.transaction.status(orderId)
     .then((res)=>{
+      console.log(typeof res)
       return res
     })
     .catch((err)=>{
@@ -29,8 +30,33 @@ const verifyMidtransStatus  = (orderId) => {
 const courseOrderResolvers = {
   Query:{
     async getCourseOrder(_, {orderId}, context){
-      const res = verifyMidtransStatus(orderId)
-      console.log(res)
+
+      const user = checkAuth(context)
+
+      const {transaction_status} = await verifyMidtransStatus(orderId)
+      console.log()
+
+      const courseOrder = await CourseOrder.findOne({orderId})
+
+      if (transaction_status !== courseOrder.midtransStatus){
+        courseOrder.midtransStatus = transaction_status
+        if (courseOrder.midtransStatus === 'capture' || courseOrder.midtransStatus === 'settlement'){
+          courseOrder.courseAccess = true
+        }else {
+          courseOrder.courseAccess = false
+        }
+        const res = await courseOrder.save()
+        return {
+          ...res._doc,
+          id: res.id
+        }
+      }
+
+      return {
+        ...courseOrder._doc,
+        id: courseOrder._id
+      }
+
     },
   },
   Mutation: {
