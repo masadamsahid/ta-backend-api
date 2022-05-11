@@ -14,25 +14,13 @@ const typeDefs = gql`
         id: ID!
         courseCode: String!
         title: String!
-        tutor: String!
+        tutor: User
         description: String!
         topics: [Topic]!
         price: Int!
         salesCount: Int!
         createdAt: String!
     }
-    type User {
-        id: ID!
-        username: String!
-        email: String!
-        role: String!
-        about: String!
-        token: String!
-        lastUpdate: String!
-        createdAt: String!
-    }
-    type Users { data: [User], count: Int!}
-    type Courses { data: [Course], count: Int!}
     type CourseOrder {
         id: ID
         orderId: String
@@ -46,12 +34,25 @@ const typeDefs = gql`
         updatedAt: String
         createdAt: String
     }
+    type User {
+        id: ID!
+        username: String!
+        email: String!
+        role: String!
+        about: String!
+        token: String!
+        lastUpdate: String!
+        createdAt: String!
+    }
+    type Users { data: [User], count: Int! }
+    type Courses { data: [Course], count: Int! }
+    type CourseOrders { data: [CourseOrder], count: Int! }
     input RegisterInput{
         username: String!
         email: String!
         password: String!
         confirmPassword: String!
-        about: String!
+        about: String
     }
     type Query{
         sayHi: String!
@@ -62,6 +63,7 @@ const typeDefs = gql`
         getCourse(courseCode: String): Course
         
         getCourseOrder(orderId: String): CourseOrder
+        getCourseOrders: CourseOrders
     }
     type Mutation {
         register(registerInput: RegisterInput): User!

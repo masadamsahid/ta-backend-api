@@ -2,6 +2,7 @@ import {ForbiddenError, UserInputError} from "apollo-server";
 
 import checkAuth from "../../utils/checkAuth.js";
 import Course from "../../models/Course.js  ";
+import User from "../../models/User.js";
 
 
 const courseResolvers = {
@@ -9,8 +10,13 @@ const courseResolvers = {
     async getCourses(parent, {page, pageSize}){
 
       try{
-        const courses = await Course.find({}).sort({createdAt: 1}).skip((page-1) * pageSize).limit(pageSize);
+        const courses = await Course.find({})
+          .sort({createdAt: 1})
+          .skip((page-1) * pageSize)
+          .populate('tutor')
+          .limit(pageSize);
         const count = await Course.find({}).sort({createdAt: 1}).count()
+
         return {
           count: count,
           data: courses,
@@ -21,7 +27,7 @@ const courseResolvers = {
     },
     async getCourse(parent, {courseCode}){
       try {
-        const course = await Course.findOne({courseCode})
+        const course = await Course.findOne({courseCode}).populate('tutor')
         if (!course){
           throw new Error('Course not found')
         }
@@ -62,16 +68,20 @@ const courseResolvers = {
        * 1. Create a new Course (NICE! COMPLETED ✔)
        * 2. Save the new Course (NICE! COMPLETED ✔)
        */
+      tutor = await User.findOne({username: tutor})
+      if(!(user.role === "admin" || user.role === "tutor")){
+        throw new UserInputError('This user cannot be tutor of a course')
+      }
       const newCourse = new Course({
         courseCode,
         title,
-        tutor,
         description,
         price,
+        tutor: tutor._id,
         salesCount: 0,
         createdAt: new Date().toISOString()
       })
-      const res = await newCourse.save()
+      const res = await newCourse.save().then((r)=> r.populate('tutor'))
 
       /*TODO: Return response (NICE! COMPLETED ✔)
        */

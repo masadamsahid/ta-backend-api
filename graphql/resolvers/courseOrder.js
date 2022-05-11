@@ -29,6 +29,8 @@ const verifyMidtransStatus  = (orderId) => {
 
 const courseOrderResolvers = {
   Query:{
+    async getCourseOrders(_, {}, context){
+    },
     async getCourseOrder(_, {orderId}, context){
 
       const user = checkAuth(context)
