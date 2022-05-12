@@ -19,7 +19,6 @@ const courseSchema = new mongoose.Schema({
       }
     ], default: []},
   price: Number,
-  salesCount: Number,
   createdAt: String
 })
 

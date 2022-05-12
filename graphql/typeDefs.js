@@ -18,7 +18,6 @@ const typeDefs = gql`
         description: String!
         topics: [Topic]!
         price: Int!
-        salesCount: Int!
         createdAt: String!
     }
     type CourseOrder {
@@ -26,8 +25,8 @@ const typeDefs = gql`
         orderId: String
         midtransToken: String
         redirectUrl: String
-        userId: ID
-        courseId: ID
+        user: User
+        course: Course
         amount: Float
         midtransStatus: String
         courseAccess: Boolean

@@ -19,7 +19,6 @@ const snap = new midtransClient.Snap({
 const verifyMidtransStatus  = (orderId) => {
   return snap.transaction.status(orderId)
     .then((res)=>{
-      console.log(typeof res)
       return res
     })
     .catch((err)=>{
@@ -29,18 +28,58 @@ const verifyMidtransStatus  = (orderId) => {
 
 const courseOrderResolvers = {
   Query:{
-    async getCourseOrders(_, {}, context){
+    async getCourseOrders(_, { page, pageSize }, context){
+
+      const user = checkAuth(context)
+
+      const courseOrders = await CourseOrder.find({})
+        .sort({createdAt: 1})
+        .skip((page-1) * pageSize)
+        .limit(pageSize)
+        .populate(['user','course'])
+
+      courseOrders.map(async (courseOrder) => {
+        const {transaction_status} = await verifyMidtransStatus(courseOrder.orderId).catch(()=> {
+          return {transaction_status: null}
+        });
+
+        if (transaction_status !== courseOrder.midtransStatus && transaction_status !== null){
+          courseOrder.midtransStatus = transaction_status
+          if (courseOrder.midtransStatus === 'capture' || courseOrder.midtransStatus === 'settlement'){
+            courseOrder.courseAccess = true
+          }else {
+            courseOrder.courseAccess = false
+          }
+          const res = await courseOrder.save()
+          return {
+            ...res._doc,
+            id: res.id
+          }
+        }
+      });
+
+      const count = await CourseOrder.find({})
+        .sort({createdAt: 1})
+        .count()
+
+
+      return {
+        count: count,
+        data: courseOrders,
+      };
+
     },
     async getCourseOrder(_, {orderId}, context){
 
       const user = checkAuth(context)
 
-      const {transaction_status} = await verifyMidtransStatus(orderId)
-      console.log()
+      const {transaction_status} = await verifyMidtransStatus(orderId).catch(()=> {
+        return {transaction_status: null}
+      })
 
-      const courseOrder = await CourseOrder.findOne({orderId})
+      const courseOrder = await CourseOrder.findOne({orderId}).populate(['user', 'course'])
 
-      if (transaction_status !== courseOrder.midtransStatus){
+      if (transaction_status !== courseOrder.midtransStatus && transaction_status !== null){
         courseOrder.midtransStatus = transaction_status
         if (courseOrder.midtransStatus === 'capture' || courseOrder.midtransStatus === 'settlement'){
           courseOrder.courseAccess = true
@@ -65,6 +104,7 @@ const courseOrderResolvers = {
     async createCourseOrder(_,{courseCode}, context){
 
       const user = await User.findById(checkAuth(context).id)
+      if (!user) throw new Error('User not registered')
 
       const course  = await Course.findOne({courseCode})
 
@@ -74,9 +114,9 @@ const courseOrderResolvers = {
 
       const courseOrder = new CourseOrder({
         orderId: `COURSE${courseCode}${user.username}-${new Date().toISOString()}`,
-        courseId: course._id,
+        course: course._id,
         amount: course.price,
-        userId: user._id,
+        user: user._id,
         midtransStatus: "pending",
         courseAccess: false,
         createdAt: new Date().toISOString()
@@ -97,7 +137,7 @@ const courseOrderResolvers = {
           courseOrder.midtransToken = transaction.token
           courseOrder.redirectUrl = transaction.redirect_url
           console.log("transactionURL:", transaction.redirect_url)
-          const res = await courseOrder.save()
+          const res = await courseOrder.save().then(r => r.populate(['user', 'course']))
           console.log("===== Course order SAVED successfully =====")
           return {
             ...res._doc,
