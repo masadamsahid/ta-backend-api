@@ -119,7 +119,8 @@ const courseOrderResolvers = {
         user: user._id,
         midtransStatus: "pending",
         courseAccess: false,
-        createdAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
       })
 
       const parameter = {

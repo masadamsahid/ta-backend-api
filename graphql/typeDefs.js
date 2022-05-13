@@ -62,7 +62,7 @@ const typeDefs = gql`
         getCourse(courseCode: String): Course
         
         getCourseOrder(orderId: String): CourseOrder
-        getCourseOrders: CourseOrders
+        getCourseOrders(page: Int, pageSize: Int): CourseOrders
     }
     type Mutation {
         register(registerInput: RegisterInput): User!
