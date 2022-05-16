@@ -3,6 +3,7 @@ import {ForbiddenError, UserInputError} from "apollo-server";
 import checkAuth from "../../utils/checkAuth.js";
 import Course from "../../models/Course.js  ";
 import User from "../../models/User.js";
+import {validateCreateCourseInput} from "../../utils/validators.js";
 
 
 const courseResolvers = {
@@ -49,6 +50,11 @@ const courseResolvers = {
       const user = checkAuth(context)
       if(!(user.role === "admin" || user.role === "tutor")){
         throw new ForbiddenError('Unauthorized to do this action! Please contact admin!')
+      }
+
+      const {errors, valid} = validateCreateCourseInput(title,courseCode,tutor,price,description)
+      if (!valid){
+        throw new UserInputError('Input Error(s)', {errors})
       }
 
       /*TODO:
