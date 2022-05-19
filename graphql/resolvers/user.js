@@ -46,10 +46,10 @@ const userResolvers = {
     }
   },
   Mutation: {
-    async register(_, {registerInput: {username, email, password, confirmPassword, about}}) {
+    async register(_, {registerInput: {username, fullName, email, password, confirmPassword, about}}) {
 
       // Validate user registration data
-      const {valid, errors} = validateRegisterInput(username, email, password, confirmPassword);
+      const {valid, errors} = validateRegisterInput({username, fullName, email, password, confirmPassword, about});
       if (!valid) {
         throw new UserInputError('Errors', {errors})
       } else {
@@ -71,6 +71,7 @@ const userResolvers = {
       // TODO: make new user and save to MONGODB
       const newUser = new User({
         username,
+        fullName,
         email,
         password,
         about,

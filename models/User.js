@@ -3,9 +3,10 @@ import mongoose from 'mongoose'
 
 
 const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
+  username: {type: String, required: true},
+  fullName: String,
+  email: {type: String, required: true},
+  password: {type: String, required: true},
   role: {
     type: String,
     enum: ["admin", "member", "tutor"]

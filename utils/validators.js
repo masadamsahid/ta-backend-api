@@ -1,4 +1,4 @@
-export const validateRegisterInput = (username, email, password, confirmPassword) => {
+export const validateRegisterInput = ({username, fullName, email, password, confirmPassword, about}) => {
   const errors = {}
 
   // USERNAME VALIDATION
@@ -11,7 +11,12 @@ export const validateRegisterInput = (username, email, password, confirmPassword
     }
   }
 
-  // EMAIL ADRESS VALIDATION
+  // FULL NAME VALIDATION
+  if (fullName.length > 64){
+    errors.fullName = 'Full name can only contain up to 64 characters'
+  }
+
+  // EMAIL ADDRESS VALIDATION
   if(email.length <= 0 || email.trim() === ''){
     errors.email = 'Email must not be empty'
   }else {

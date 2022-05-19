@@ -48,6 +48,7 @@ const typeDefs = gql`
     type CourseOrders { data: [CourseOrder], count: Int! }
     input RegisterInput{
         username: String!
+        fullName: String!
         email: String!
         password: String!
         confirmPassword: String!
