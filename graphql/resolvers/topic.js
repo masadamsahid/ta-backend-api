@@ -13,7 +13,6 @@ const topicResolvers = {
        * 2. Throw an Error if not exists
        */
       const course = await Course.findOne({courseCode})
-      console.log(course)
       if (!course){
         throw new UserInputError('Course not found', {
           errors: {
@@ -62,7 +61,11 @@ const topicResolvers = {
         videoUrl,
         body,
         createdAt: new Date().toISOString()
-      })
+      });
+
+      // Sort the topics field after push
+      // so it is ordered by topic's orderNo
+      course.topics.sort((a,b) => a.orderNo - b.orderNo)
 
       await course.save()
 
