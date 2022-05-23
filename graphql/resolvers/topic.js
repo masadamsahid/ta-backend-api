@@ -6,13 +6,12 @@ import Course from "../../models/Course.js";
 const topicResolvers = {
   Mutation: {
     async addTopic(proxy, {courseCode, topicTitle, orderNo, videoUrl, body}, context){
-      console.log("t7est")
 
       /*TODO:
        * 1. Check is course exists
        * 2. Throw an Error if not exists
        */
-      const course = await Course.findOne({courseCode})
+      const course = await Course.findOne({courseCode}).populate('tutor')
       if (!course){
         throw new UserInputError('Course not found', {
           errors: {
@@ -35,7 +34,7 @@ const topicResolvers = {
          * 1. Check is user an admin or user's username is same course tutor's username
          * 2. Throw an Error if requirement isn't fulfilled
          */
-        if(user.role !== "admin" && user.username !== course.username){
+        if(user.role !== "admin" && user.username !== course.tutor.username){
           throw new ForbiddenError('Unauthorized to do this action! Please contact admin!')
         }
       }
