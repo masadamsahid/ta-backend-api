@@ -107,9 +107,9 @@ const courseResolvers = {
       const user = checkAuth(context)
 
       try {
-        const course = await Course.findOne({courseCode})
+        const course = await Course.findOne({courseCode}).populate('tutor')
 
-        if(user.username === course.tutor || user.role === 'admin'){
+        if(user.username === course.tutor.username || user.role === 'admin'){
           await course.delete();
           return "Course successfully deleted"
         }else {
