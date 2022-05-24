@@ -5,7 +5,7 @@ import Course from "../../models/Course.js";
 
 const topicResolvers = {
   Mutation: {
-    async addTopic(proxy, {courseCode, topicTitle, orderNo, videoUrl, body}, context){
+    async addTopic(parent, {courseCode, topicTitle, orderNo, videoUrl, body}, context){
 
       /*TODO:
        * 1. Check is course exists
@@ -69,7 +69,27 @@ const topicResolvers = {
       await course.save()
 
       return course
+    },
+    async deleteTopic(parent,{courseCode, orderNo}, context){
 
+      const user = checkAuth(context);
+
+      try{
+        const course = await Course.findOne({courseCode}).populate('tutor');
+
+        if(user.username === course.tutor.username || user.role === 'admin'){
+          course.topics = course.topics.filter((topic)=>topic.orderNo !== orderNo)
+          const res = await course.save()
+          return {
+            ...res._doc,
+            id: res._id,
+          };
+        }else {
+          throw new ForbiddenError('Unauthorized to do this action')
+        }
+      }catch (err) {
+        throw new Error(err)
+      }
     }
   }
 }

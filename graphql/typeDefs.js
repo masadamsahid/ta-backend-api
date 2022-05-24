@@ -79,7 +79,7 @@ const typeDefs = gql`
             description: String,
             price: Float,
         ): Course!
-        deleteCourse(courseCode: String): String!
+        deleteCourse(courseCode: String!): String!
         addTopic(
             courseCode: String,
             topicTitle: String,
@@ -87,6 +87,7 @@ const typeDefs = gql`
             videoUrl: String,
             body: String,
         ): Course!
+        deleteTopic(courseCode: String!, orderNo:Int): Course!
         
         createCourseOrder(courseCode: String) : CourseOrder
     }
