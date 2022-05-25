@@ -118,8 +118,39 @@ const courseResolvers = {
       }catch (err){
         throw new Error(err)
       }
+    },
+    async editCourse(_, {courseId,courseCode,title,tutor,description,price}, context){
+      const user = checkAuth(context);
 
+      const course = await Course.findById(courseId).populate('tutor')
 
+      if(user.username === course.tutor.username || user.role === 'admin'){
+
+        course.courseCode = courseCode;
+        course.title = title;
+        course.description = description;
+        course.price = price;
+
+        if(tutor !== course.tutor.username){
+          const newTutor = await User.findOne({username: tutor});
+          if (!newTutor || newTutor.role === 'member'){
+            throw new UserInputError('Tutor not found',{
+              errors: {
+                tutor: 'Could not find tutor with provided username',
+              },
+            });
+          }
+          course.tutor = newTutor;
+        }
+        const res = await course.save();
+
+        return {
+          ...res._doc,
+          id: res._id,
+        };
+      }else {
+        throw new ForbiddenError('Unauthorized to do this action');
+      }
     },
   }
 }

@@ -40,8 +40,8 @@ const typeDefs = gql`
         fullName: String!
         role: String!
         about: String!
-        token: String!
-        lastUpdate: String!
+        token: String
+        lastUpdate: String
         createdAt: String!
     }
     type Users { data: [User], count: Int! }
@@ -80,6 +80,7 @@ const typeDefs = gql`
             price: Float,
         ): Course!
         editCourse(
+            courseId: ID,
             courseCode: String,
             title: String,
             tutor: String,
@@ -87,6 +88,7 @@ const typeDefs = gql`
             price: Float,
         ): Course!
         deleteCourse(courseCode: String!): String!
+        
         addTopic(
             courseCode: String,
             topicTitle: String,
