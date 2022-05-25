@@ -7,7 +7,7 @@ const typeDefs = gql`
         orderNo: Int!
         videoUrl: String
         body: String
-        lastUpdated: String!
+        lastUpdated: String
         createdAt: String!
     }
     type Course{
@@ -59,10 +59,10 @@ const typeDefs = gql`
         sayHi: String!
         getUsers(page: Int, pageSize: Int, ): Users,
         getUser(username: String): User
-        
+
         getCourses(page: Int, pageSize: Int): Courses
         getCourse(courseCode: String): Course
-        
+
         getCourseOrder(orderId: String): CourseOrder
         getCourseOrders(page: Int, pageSize: Int): CourseOrders
     }
@@ -71,8 +71,15 @@ const typeDefs = gql`
         login(usernameEmail: String, password: String): User!
         changeUserRole(targetUsername:String, changeRoleTo:String): User!
         editSelfUserProfile(id: String, about: String): User
-        
+
         createCourse(
+            courseCode: String,
+            title: String,
+            tutor: String,
+            description: String,
+            price: Float,
+        ): Course!
+        editCourse(
             courseCode: String,
             title: String,
             tutor: String,
@@ -87,8 +94,16 @@ const typeDefs = gql`
             videoUrl: String,
             body: String,
         ): Course!
+        editTopic(
+            oldOrderNo: Int,
+            courseCode: String,
+            topicTitle: String,
+            orderNo: Int,
+            videoUrl: String,
+            body: String,
+        ): Course!
         deleteTopic(courseCode: String!, orderNo:Int): Course!
-        
+
         createCourseOrder(courseCode: String) : CourseOrder
     }
 `
