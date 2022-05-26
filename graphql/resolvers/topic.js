@@ -128,6 +128,10 @@ const topicResolvers = {
           course.topics[idx].body = body
           course.topics[idx].lastUpdated = new Date().toISOString()
 
+          // Sort the topics after push
+          // so it is ordered by topic's orderNo
+          course.topics.sort((a, b) => a.orderNo - b.orderNo)
+
           const res = await course.save()
 
           return {
