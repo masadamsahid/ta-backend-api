@@ -176,8 +176,6 @@ const courseResolvers = {
 
       course.thumbnailImg = thumbnailImg;
 
-      console.log(course)
-
       try {
         const res = await course.save();
         return {
