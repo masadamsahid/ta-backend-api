@@ -7,6 +7,7 @@ const courseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  thumbnailImg: String,
   description: String,
   topics: {type :[
       {

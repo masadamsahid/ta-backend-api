@@ -88,3 +88,20 @@ export const validateCreateCourseInput = (title, courseCode, tutor, price, descr
     valid: Object.keys(errors) < 1
   }
 }
+
+export const validateImageInput = (thumbnailImg) => {
+  const errors = {}
+
+  const ext = thumbnailImg.substring("data:image/".length, thumbnailImg.indexOf(";base64"));
+
+  if(ext !== 'jpg' && ext !== 'jpeg' && ext !== 'png'){
+    errors.thumbnailImg = 'File must be *.jpg, *.jpeg, or *.png,'
+  }else if(new Buffer(thumbnailImg, 'base64').byteLength > 	512000){
+    errors.thumbnailImg = 'File\'s size must be less than 500 kilobytes'
+  }
+
+  return{
+    errors,
+    valid: Object.keys(errors) < 1
+  }
+}

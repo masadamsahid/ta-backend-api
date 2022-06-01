@@ -3,7 +3,7 @@ import {ForbiddenError, UserInputError} from "apollo-server";
 import checkAuth from "../../utils/checkAuth.js";
 import Course from "../../models/Course.js  ";
 import User from "../../models/User.js";
-import {validateCreateCourseInput} from "../../utils/validators.js";
+import {validateCreateCourseInput, validateImageInput} from "../../utils/validators.js";
 
 
 const courseResolvers = {
@@ -152,6 +152,43 @@ const courseResolvers = {
         throw new ForbiddenError('Unauthorized to do this action');
       }
     },
+    async uploadCourseThumbnail(_,{courseId,thumbnailImg},context){
+
+      // Check inputs
+      const {valid, errors} = validateImageInput(thumbnailImg);
+      if (!valid){
+        throw new UserInputError('Input Error(s)', {errors})
+      }
+
+      const user = checkAuth(context);
+
+      if(!['admin','tutor'].includes(user.role)){
+        throw new ForbiddenError('Unauthorized to do this action');
+      }
+
+      const course = await Course.findById(courseId).populate('tutor');
+
+      if(user.role !== 'admin'){
+        if (user.username !== course.tutor.username){
+          throw new ForbiddenError('Unauthorized to do this action');
+        }
+      }
+
+      course.thumbnailImg = thumbnailImg;
+
+      console.log(course)
+
+      try {
+        const res = await course.save();
+        return {
+          ...res._doc,
+          id: res._id
+        }
+      }catch(err){
+        throw new Error(err);
+      }
+
+    }
   }
 }
 

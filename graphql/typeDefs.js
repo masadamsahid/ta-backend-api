@@ -18,6 +18,7 @@ const typeDefs = gql`
         description: String!
         topics: [Topic]!
         price: Int!
+        thumbnailImg: String
         createdAt: String!
     }
     type CourseOrder {
@@ -88,6 +89,7 @@ const typeDefs = gql`
             price: Float,
         ): Course!
         deleteCourse(courseCode: String!): String!
+        uploadCourseThumbnail(courseId:ID!, thumbnailImg:String!):Course!
         
         addTopic(
             courseCode: String,
