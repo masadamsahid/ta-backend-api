@@ -90,6 +90,7 @@ const typeDefs = gql`
         ): Course!
         deleteCourse(courseCode: String!): String!
         uploadCourseThumbnail(courseId:ID!, thumbnailImg:String!):Course!
+        removeCourseThumbnail(courseId:ID!):Course!
         
         addTopic(
             courseCode: String,
