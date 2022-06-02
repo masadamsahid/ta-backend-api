@@ -12,11 +12,11 @@ const courseResolvers = {
 
       try{
         const courses = await Course.find({})
-          .sort({createdAt: 1})
+          .sort({createdAt: -1})
           .skip((page-1) * pageSize)
           .populate('tutor')
           .limit(pageSize);
-        const count = await Course.find({}).sort({createdAt: 1}).count()
+        const count = await Course.find({}).sort({createdAt: -1}).count()
 
         return {
           count: count,
