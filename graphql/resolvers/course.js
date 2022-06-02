@@ -166,7 +166,11 @@ const courseResolvers = {
         throw new ForbiddenError('Unauthorized to do this action');
       }
 
-      const course = await Course.findById(courseId).populate('tutor');
+      const course = await Course.findById(courseId).populate('tutor').catch(err=>{
+        if (err.name === 'CastError'){
+          throw new UserInputError('Invalid input', {errors: {courseId: 'courseId doesn\'t match with any course'}})
+        }
+      });
 
       if(user.role !== 'admin'){
         if (user.username !== course.tutor.username){
