@@ -144,7 +144,7 @@ const userResolvers = {
         id: res._id
       }
     },
-    async editSelfUserProfile(_, {id, about}, context){
+    async editSelfUserProfile(_, {id, fullName, about}, context){
 
       // Editor Auth
       const editor = checkAuth(context)
@@ -154,8 +154,13 @@ const userResolvers = {
       }
 
       try {
-        const user = await User.findOne({id})
+        const user = await User.findOne({id}).catch(err=>{
+          if (err.name === 'CastError'){
+            throw new UserInputError('Invalid input', {errors: {userId: 'userId doesn\'t match with any user'}})
+          }
+        })
 
+        user.fullName = fullName
         user.about = about
         user.lastUpdate = new Date().toISOString()
         await user.save()
