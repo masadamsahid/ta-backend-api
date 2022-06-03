@@ -40,7 +40,7 @@ const typeDefs = gql`
         email: String!
         fullName: String!
         role: String!
-        about: String!
+        about: String
         token: String
         lastUpdate: String
         createdAt: String!
@@ -48,14 +48,6 @@ const typeDefs = gql`
     type Users { data: [User], count: Int! }
     type Courses { data: [Course], count: Int! }
     type CourseOrders { data: [CourseOrder], count: Int! }
-    input RegisterInput{
-        username: String!
-        fullName: String
-        email: String!
-        password: String!
-        confirmPassword: String!
-        about: String
-    }
     type Query{
         sayHi: String!
         getUsers(page: Int, pageSize: Int, ): Users,
@@ -68,7 +60,14 @@ const typeDefs = gql`
         getCourseOrders(page: Int, pageSize: Int): CourseOrders
     }
     type Mutation {
-        register(registerInput: RegisterInput): User!
+        register(
+            username: String!,
+            fullName: String!,
+            email: String!,
+            password: String!,
+            confirmPassword: String!,
+            about: String,
+        ): User!
         login(usernameEmail: String, password: String): User!
         changeUserRole(targetUsername:String, changeRoleTo:String): User!
         editSelfUserProfile(id: String, about: String): User
