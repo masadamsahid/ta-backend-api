@@ -1,8 +1,11 @@
 import {ForbiddenError, UserInputError} from "apollo-server";
 
-import checkAuth from "../../utils/checkAuth.js";
+// Imported Models
 import Course from "../../models/Course.js  ";
 import User from "../../models/User.js";
+import CourseOrder from "../../models/CourseOrder.js";
+
+import checkAuth from "../../utils/checkAuth.js";
 import {validateCreateCourseInput, validateImageInput} from "../../utils/validators.js";
 
 
@@ -26,12 +29,40 @@ const courseResolvers = {
         throw new Error(err)
       }
     },
-    async getCourse(parent, {courseCode}){
+    async getCourse(parent, {courseCode}, context){
       try {
         const course = await Course.findOne({courseCode}).populate('tutor')
         if (!course){
           throw new Error('Course not found')
         }
+
+        // check if there is auth JWT from the req header or not
+        // if no JTW, return the course but don't show the topics
+        if (!context.req.headers.authorization){
+          course.topics = [];
+          return course;
+        }
+
+        let user = checkAuth(context);
+        user = await User.findById(user.id);
+
+        if (user.role !== 'admin') {
+
+          //Check if the user is the tutor or not
+          if (user.id !== course.tutor._id) {
+            // if not owner/tutor, check if the user already bought the course
+            const courseOrder = await CourseOrder
+              .findOne({user: user._id, course: course._id, courseAccess: true});
+
+            // if no order, return the course without the topics
+            if (!courseOrder){
+              course.topics = [];
+              return course;
+            }
+          }
+
+        }
+
         return course
       }catch (err) {
         throw new Error(err)

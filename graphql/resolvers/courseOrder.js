@@ -1,5 +1,3 @@
-import midtransClient from "midtrans-client";
-import dotenv from "dotenv";
 
 import User from "../../models/User.js";
 import Course from "../../models/Course.js";
@@ -7,24 +5,7 @@ import CourseOrder from "../../models/CourseOrder.js";
 
 import checkAuth from "../../utils/checkAuth.js";
 
-dotenv.config()
-
-// Create Snap API instance
-const snap = new midtransClient.Snap({
-  isProduction : false,
-  serverKey : process.env.MIDTRANS_SB_SERVER,
-  clientKey : process.env.MIDTRANS_SB_CLIENT,
-});
-
-const verifyMidtransStatus  = (orderId) => {
-  return snap.transaction.status(orderId)
-    .then((res)=>{
-      return res
-    })
-    .catch((err)=>{
-      throw new Error(err)
-    });
-}
+import snap, {verifyMidtransStatus} from "../../utils/midtransSnap.js";
 
 const courseOrderResolvers = {
   Query:{
