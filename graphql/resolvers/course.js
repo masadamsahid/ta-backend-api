@@ -23,7 +23,9 @@ const courseResolvers = {
 
         return {
           count: count,
-          data: courses,
+          // courses' topics will not be shown in getCourses
+          // they are only shown by getCourse (single specific) query
+          data: courses.map(course => {course.topics = []; return course;}),
         }
       }catch (err) {
         throw new Error(err)
