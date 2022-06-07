@@ -93,6 +93,20 @@ const courseOrderResolvers = {
         throw new Error('Course not found')
       }
 
+      // Check already bought
+      const existedCourseOrders = await CourseOrder
+        .find({
+          user: user._id,
+          course: course._id,
+          midtransStatus: ["capture", "settlement", "pending",]
+        })
+        .sort({createdAt:-1})
+        .populate(['user','course']);
+
+      if (existedCourseOrders.length > 0){
+        return existedCourseOrders[0];
+      }
+
       const courseOrder = new CourseOrder({
         orderId: `COURSE${courseCode}${user.username}-${new Date().toISOString()}`,
         course: course._id,
