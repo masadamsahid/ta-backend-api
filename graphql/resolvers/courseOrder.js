@@ -14,15 +14,16 @@ const courseOrderResolvers = {
       const user = checkAuth(context)
 
       const courseOrders = await CourseOrder.find({})
-        .sort({createdAt: 1})
+        .sort({createdAt: -1})
         .skip((page-1) * pageSize)
         .limit(pageSize)
         .populate(['user','course'])
 
       courseOrders.map(async (courseOrder) => {
-        const {transaction_status} = await verifyMidtransStatus(courseOrder.orderId).catch(()=> {
-          return {transaction_status: null}
-        });
+        const {transaction_status} = await verifyMidtransStatus(courseOrder.orderId)
+          .catch(()=> {
+            return {transaction_status: null}
+          });
 
         if (transaction_status !== courseOrder.midtransStatus && transaction_status !== null){
           courseOrder.midtransStatus = transaction_status

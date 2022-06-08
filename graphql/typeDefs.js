@@ -20,6 +20,8 @@ const typeDefs = gql`
         price: Int!
         thumbnailImg: String
         createdAt: String!
+
+        courseOrder: CourseOrder
     }
     type CourseOrder {
         id: ID

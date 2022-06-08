@@ -7,6 +7,7 @@ import CourseOrder from "../../models/CourseOrder.js";
 
 import checkAuth from "../../utils/checkAuth.js";
 import {validateCreateCourseInput, validateImageInput} from "../../utils/validators.js";
+import {verifyMidtransStatus} from "../../utils/midtransSnap.js";
 
 
 const courseResolvers = {
@@ -51,16 +52,52 @@ const courseResolvers = {
         if (user.role !== 'admin') {
 
           //Check if the user is the tutor or not
-          if (user.id !== course.tutor._id) {
+          if (user.id !== course.tutor.id) {
             // if not owner/tutor, check if the user already bought the course
             const courseOrder = await CourseOrder
-              .findOne({user: user._id, course: course._id, courseAccess: true});
+              .find({
+                user: user._id,
+                course: course._id,
+                midtransStatus: {$in : ["capture", "settlement", "pending", "deny"]}
+              })
+              .sort({createdAt:-1})
+              .populate(['user', 'course'])
+              .then(res => res[0]);
 
             // if no order, return the course without the topics
             if (!courseOrder){
               course.topics = [];
               return course;
             }
+
+            const {transaction_status} = await verifyMidtransStatus(courseOrder.orderId)
+              .catch(()=> {
+                return {transaction_status: null}
+              });
+
+            if (transaction_status !== null && transaction_status !== courseOrder.midtransStatus){
+              courseOrder.midtransStatus = transaction_status;
+
+              // change courseAccess depend
+              switch (courseOrder.midtransStatus){
+                case "settlement":
+                case "capture":
+                  courseOrder.courseAccess = true;
+                  break;
+                default:
+                  courseOrder.courseAccess = false;
+              }
+
+              // save updated course order
+              courseOrder.updatedAt = new Date().toISOString();
+              await courseOrder.save();
+            }
+
+            course.courseOrder = courseOrder;
+            if(!course.courseOrder.courseAccess){
+              course.topics = [];
+            }
+
           }
 
         }

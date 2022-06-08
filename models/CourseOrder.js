@@ -13,8 +13,10 @@ const courseOrderSchema = new mongoose.Schema({
       "capture",
       "settlement",
       "pending",
+      "deny",
       "cancel",
-      "expired",
+      "expire",
+      "failure",
     ],
     required: true
   },
