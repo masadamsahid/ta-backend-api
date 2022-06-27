@@ -1,6 +1,19 @@
 import {gql} from "apollo-server";
 
 const typeDefs = gql`
+    type User {
+        id: ID!
+        username: String!
+        email: String!
+        fullName: String!
+        role: String!
+        about: String
+        token: String
+        lastUpdate: String
+        createdAt: String!
+    }
+    type Users { data: [User], count: Int! }
+    
     type Topic{
         id: ID!
         topicTitle: String!
@@ -23,6 +36,8 @@ const typeDefs = gql`
 
         courseOrder: CourseOrder
     }
+    type Courses { data: [Course], count: Int! }
+    
     type CourseOrder {
         id: ID
         orderId: String
@@ -36,20 +51,8 @@ const typeDefs = gql`
         updatedAt: String
         createdAt: String
     }
-    type User {
-        id: ID!
-        username: String!
-        email: String!
-        fullName: String!
-        role: String!
-        about: String
-        token: String
-        lastUpdate: String
-        createdAt: String!
-    }
-    type Users { data: [User], count: Int! }
-    type Courses { data: [Course], count: Int! }
     type CourseOrders { data: [CourseOrder], count: Int! }
+    
     type Query{
         sayHi: String!
         getUsers(page: Int, pageSize: Int, ): Users,

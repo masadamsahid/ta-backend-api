@@ -1,26 +1,27 @@
 import mongoose from "mongoose";
 
 const courseSchema = new mongoose.Schema({
-  courseCode: String,
-  title: String,
+  courseCode: {type: String, unique: true, required: true},
+  title: {type: String, required: true},
   tutor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   thumbnailImg: String,
   description: String,
   topics: {type :[
       {
-        topicTitle: String,
-        orderNo: Number,
+        topicTitle: {type: String, required: true},
+        orderNo: {type: Number, unique: true, required:true},
         videoUrl: String,
         body: String,
         lastUpdated: String,
-        createdAt: String
+        createdAt: {type: String, required: true}
       }
     ], default: []},
-  price: Number,
-  createdAt: String
+  price: {type: Number, required: true},
+  createdAt: {type: String, required: true}
 })
 
 const Course = mongoose.model('Course', courseSchema)

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const courseOrderSchema = new mongoose.Schema({
-  orderId: { type: String, required: true},
+  orderId: { type: String, unique:true, required: true},
   midtransToken: {type: String, required: true},
   redirectUrl: {type: String, required: true},
   user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
@@ -20,7 +20,7 @@ const courseOrderSchema = new mongoose.Schema({
     ],
     required: true
   },
-  courseAccess: {type: Boolean, default: false},
+  courseAccess: {type: Boolean, default: false, required: true},
   updatedAt: String,
   createdAt: {type: String, required: true}
 });
