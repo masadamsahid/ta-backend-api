@@ -12,12 +12,12 @@ const courseSchema = new mongoose.Schema({
   description: String,
   topics: {type :[
       {
-        topicTitle: {type: String, required: true},
-        orderNo: {type: Number, unique: true, required:true},
+        topicTitle: String,
+        orderNo: Number,
         videoUrl: String,
         body: String,
         lastUpdated: String,
-        createdAt: {type: String, required: true}
+        createdAt: String
       }
     ], default: []},
   price: {type: Number, required: true},
