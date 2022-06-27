@@ -5,7 +5,7 @@ import Course from "../../models/Course.js";
 
 const topicResolvers = {
   Mutation: {
-    async addTopic(parent, {courseCode, topicTitle, orderNo, videoUrl, body}, context) {
+    async addTopic(parent, {courseCode, topicTitle, orderNo, videoId, body}, context) {
 
       /*TODO:
        * 1. Check is course exists
@@ -57,7 +57,7 @@ const topicResolvers = {
       course.topics.push({
         topicTitle,
         orderNo,
-        videoUrl,
+        videoId,
         body,
         createdAt: new Date().toISOString()
       });
@@ -91,7 +91,7 @@ const topicResolvers = {
         throw new Error(err)
       }
     },
-    async editTopic(parent, {oldOrderNo, courseCode, topicId, topicTitle, orderNo, videoUrl, body}, context) {
+    async editTopic(parent, {oldOrderNo, courseCode, topicId, topicTitle, orderNo, videoId, body}, context) {
 
       const user = checkAuth(context);
 
@@ -124,7 +124,7 @@ const topicResolvers = {
           course.topics[idx].topicId = topicId
           course.topics[idx].topicTitle = topicTitle
           course.topics[idx].orderNo = orderNo
-          course.topics[idx].videoUrl = videoUrl
+          course.topics[idx].videoId = videoId
           course.topics[idx].body = body
           course.topics[idx].lastUpdated = new Date().toISOString()
 
