@@ -14,7 +14,7 @@ const courseSchema = new mongoose.Schema({
       {
         topicTitle: String,
         orderNo: Number,
-        videoUrl: String,
+        videoId: String,
         body: String,
         lastUpdated: String,
         createdAt: String

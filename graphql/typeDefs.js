@@ -18,7 +18,7 @@ const typeDefs = gql`
         id: ID!
         topicTitle: String!
         orderNo: Int!
-        videoUrl: String
+        videoId: String
         body: String
         lastUpdated: String
         createdAt: String!
