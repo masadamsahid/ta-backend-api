@@ -109,7 +109,7 @@ const courseOrderResolvers = {
       }
 
       const courseOrder = new CourseOrder({
-        orderId: `COURSE${courseCode}${user.username}-${new Date().toISOString()}`,
+        orderId: `${courseCode}${user.username}-${new Date().toISOString()}`,
         course: course._id,
         amount: course.price,
         user: user._id,
@@ -133,9 +133,9 @@ const courseOrderResolvers = {
         .then(async transaction => {
           courseOrder.midtransToken = transaction.token
           courseOrder.redirectUrl = transaction.redirect_url
-          console.log("transactionURL:", transaction.redirect_url)
+
           const res = await courseOrder.save().then(r => r.populate(['user', 'course']))
-          console.log("===== Course order SAVED successfully =====")
+
           return {
             ...res._doc,
             id: res._id
