@@ -108,7 +108,7 @@ const typeDefs = gql`
             courseCode: String,
             topicTitle: String,
             orderNo: Int,
-            videoUrl: String,
+            videoId: String,
             body: String,
         ): Course!
         deleteTopic(courseCode: String!, orderNo:Int): Course!
