@@ -39,17 +39,17 @@ const typeDefs = gql`
   type Courses { data: [Course], count: Int! }
 
   type CourseOrder {
-    id: ID
-    orderId: String
-    midtransToken: String
-    redirectUrl: String
-    user: User
-    course: Course
-    amount: Float
-    midtransStatus: String
-    courseAccess: Boolean
+    id: ID!
+    orderId: String!
+    midtransToken: String!
+    redirectUrl: String!
+    user: User!
+    course: Course!
+    amount: Float!
+    midtransStatus: String!
+    courseAccess: Boolean!
     updatedAt: String
-    createdAt: String
+    createdAt: String!
   }
   type CourseOrders { data: [CourseOrder], count: Int! }
 
