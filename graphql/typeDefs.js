@@ -54,7 +54,6 @@ const typeDefs = gql`
   type CourseOrders { data: [CourseOrder], count: Int! }
 
   type Query{
-    sayHi: String!
     getUsers(page: Int, pageSize: Int, ): Users,
     getUser(username: String): User
 

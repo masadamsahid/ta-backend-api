@@ -8,7 +8,6 @@ const resolvers = {
     ...userResolvers.Query,
     ...courseResolvers.Query,
     ...courseOrderResolvers.Query,
-    sayHi: () => "Hello HI!",
   },
   Mutation: {
     ...userResolvers.Mutation,
