@@ -73,8 +73,8 @@ const typeDefs = gql`
       about: String,
     ): User!
     login(usernameEmail: String, password: String): User!
-    changeUserRole(targetUsername:String, changeRoleTo:String): User!
     editSelfUserProfile(id: String, about: String): User
+    changeUserRole(targetUsername:String, changeRoleTo:String): User!
 
     createCourse(
       courseCode: String,
