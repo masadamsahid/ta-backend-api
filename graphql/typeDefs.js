@@ -54,14 +54,14 @@ const typeDefs = gql`
   type CourseOrders { data: [CourseOrder], count: Int! }
 
   type Query{
-    getUsers(page: Int, pageSize: Int, ): Users,
-    getUser(username: String): User
+    getUsers(page: Int!, pageSize: Int!, ): Users,
+    getUser(username: String!): User
 
-    getCourses(page: Int, pageSize: Int): Courses
-    getCourse(courseCode: String): Course
+    getCourses(page: Int!, pageSize: Int!): Courses
+    getCourse(courseCode: String!): Course
 
-    getCourseOrder(orderId: String): CourseOrder
-    getCourseOrders(page: Int, pageSize: Int): CourseOrders
+    getCourseOrder(orderId: String!): CourseOrder
+    getCourseOrders(page: Int!, pageSize: Int!): CourseOrders
   }
   type Mutation {
     register(
