@@ -53,7 +53,7 @@ const userResolvers = {
       if (!valid) {
         throw new UserInputError('Errors', {errors})
       } else {
-        // TODO: Make sure email address or username doesn't already taken by other users
+        // Make sure email address or username doesn't already taken by other users
         const user = await User.find({$or: [{username}, {email}]})
         if (user.length > 0) {
           throw new UserInputError('Username is taken or email is registered', {
@@ -65,10 +65,10 @@ const userResolvers = {
         }
       }
 
-      // TODO: encrypt the password
+      // encrypt the password
       password = await bcrypt.hash(password, SALT)
 
-      // TODO: make new user and save to MONGODB
+      // make new user and save to MONGODB
       const newUser = new User({
         username,
         fullName,
@@ -80,7 +80,7 @@ const userResolvers = {
       })
 
       const res = await newUser.save()
-      // TODO: Generate JWT
+      // Generate JWT
       const token = generateToken(res)
 
       return {
@@ -97,23 +97,23 @@ const userResolvers = {
         throw new UserInputError('Errors', {errors})
       }
 
-      // TODO: FIND USER BY USERNAME OR EMAIL ADDRESS
+      // FIND USER BY USERNAME OR EMAIL ADDRESS
       const user = await User.findOne({$or: [{username: usernameEmail}, {email: usernameEmail}]})
 
-      // TODO: HANDLE IF USER IS NOT FOUND
+      // HANDLE IF USER IS NOT FOUND
       if (!user) {
         errors.general = 'User not found'
         throw new UserInputError('Errors', {errors})
       }
 
-      // TODO: CHECK USER PASSWORD
+      // CHECK USER PASSWORD
       const match = await bcrypt.compare(password, user.password)
       if (!match){
         errors.general = 'Wrong credentials'
         throw new UserInputError('Wrong credentials', {errors})
       }
 
-      // TODO: GENERATE A JSON WEB TOKEN IF USERNAME-EMAIL AND PASSWORD VALID
+      // GENERATE A JSON WEB TOKEN IF USERNAME-EMAIL AND PASSWORD VALID
       const token = generateToken(user);
 
       return {

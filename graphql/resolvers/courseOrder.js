@@ -129,6 +129,8 @@ const courseOrderResolvers = {
         }
       };
 
+      // CREATE TRANSACTION USING MIDTRANS
+      // THEN SAVE THE COURSE ORDER AND RETURN THE DATA
       return snap.createTransaction(parameter)
         .then(async transaction => {
           courseOrder.midtransToken = transaction.token
