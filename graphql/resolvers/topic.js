@@ -7,7 +7,7 @@ const topicResolvers = {
   Mutation: {
     async addTopic(parent, {courseCode, topicTitle, orderNo, videoId, body}, context) {
 
-      /*TODO:
+      /*
        * 1. Check is course exists
        * 2. Throw an Error if not exists
        */
@@ -20,7 +20,7 @@ const topicResolvers = {
         })
       }
 
-      /*TODO:
+      /*
        * 1. Check loginAuth
        * 2. Throw an Error if not logged in
        * 3. Check User's role
@@ -30,7 +30,7 @@ const topicResolvers = {
       if (!(user.role === "admin" || user.role === "tutor")) {
         throw new ForbiddenError('Unauthorized to do this action! Please contact admin!')
       } else {
-        /*TODO:
+        /*
          * 1. Check is user an admin or user's username is same course tutor's username
          * 2. Throw an Error if requirement isn't fulfilled
          */
@@ -39,7 +39,7 @@ const topicResolvers = {
         }
       }
 
-      /*TODO:
+      /*
        * 1. Check if orderNo taken
        * 2. If taken, throw error
        */
@@ -51,7 +51,7 @@ const topicResolvers = {
         })
       }
 
-      /*TODO:
+      /*
        * 1. Update course topic
        */
       course.topics.push({
