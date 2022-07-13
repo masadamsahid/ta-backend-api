@@ -31,6 +31,8 @@ const typeDefs = gql`
     description: String!
     topics: [Topic]!
     price: Int!
+    discountedPrice: Int
+    isDiscounted: Boolean!
     thumbnailImg: String
     createdAt: String!
 
@@ -82,6 +84,8 @@ const typeDefs = gql`
       tutor: String,
       description: String,
       price: Float,
+      discountedPrice: Float,
+      isDiscounted: Boolean!
     ): Course!
     editCourse(
       courseId: ID,
@@ -90,6 +94,8 @@ const typeDefs = gql`
       tutor: String,
       description: String,
       price: Float,
+      discountedPrice: Float,
+      isDiscounted: Boolean!
     ): Course!
     deleteCourse(courseCode: String!): String!
     uploadCourseThumbnail(courseId:ID!, thumbnailImg:String!):Course!

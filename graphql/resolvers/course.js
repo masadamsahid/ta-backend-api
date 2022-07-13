@@ -109,14 +109,14 @@ const courseResolvers = {
     }
   },
   Mutation: {
-    async createCourse(_ , {courseCode, title, tutor, description, price}, context) {
+    async createCourse(_, {courseCode, title, tutor, price, discountedPrice, isDiscounted, description}, context) {
 
       const user = checkAuth(context)
       if(!(user.role === "admin" || user.role === "tutor")){
         throw new ForbiddenError('Unauthorized to do this action! Please contact admin!')
       }
 
-      const {errors, valid} = validateCreateCourseInput(title,courseCode,tutor,price,description)
+      const {errors, valid} = validateCreateCourseInput(title,courseCode,tutor,price,discountedPrice,isDiscounted,description)
       if (!valid){
         throw new UserInputError('Input Error(s)', {errors})
       }
@@ -139,8 +139,9 @@ const courseResolvers = {
         title,
         description,
         price,
+        discountedPrice,
+        isDiscounted,
         tutor: tutor._id,
-        salesCount: 0,
         createdAt: new Date().toISOString()
       })
       const res = await newCourse.save().then((r)=> r.populate('tutor'))
@@ -167,10 +168,18 @@ const courseResolvers = {
         throw new Error(err)
       }
     },
-    async editCourse(_, {courseId,courseCode,title,tutor,description,price}, context){
+    async editCourse(_, {courseId,courseCode,title,tutor,price,discountedPrice,isDiscounted,description}, context){
       const user = checkAuth(context);
 
+      const {errors, valid} = validateCreateCourseInput(title,courseCode,tutor,price,discountedPrice,isDiscounted,description);
+      if (!valid){
+        throw new UserInputError('Input Error(s)', {errors});
+      }
+
       const course = await Course.findById(courseId).populate('tutor')
+      if (!course){
+        throw new Error('Course with the provided id is not found')
+      }
 
       if(user.username === course.tutor.username || user.role === 'admin'){
 
@@ -178,6 +187,8 @@ const courseResolvers = {
         course.title = title;
         course.description = description;
         course.price = price;
+        course.discountedPrice = discountedPrice;
+        course.isDiscounted = isDiscounted;
 
         if(tutor !== course.tutor.username){
           const newTutor = await User.findOne({username: tutor});
