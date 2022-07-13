@@ -52,7 +52,6 @@ const courseOrderResolvers = {
 
     },
     async getCourseOrder(_, {orderId}, context){
-
       const user = checkAuth(context)
 
       const {transaction_status} = await verifyMidtransStatus(orderId).catch(()=> {
@@ -60,6 +59,7 @@ const courseOrderResolvers = {
       })
 
       const courseOrder = await CourseOrder.findOne({orderId}).populate(['user', 'course'])
+      if (!courseOrder) throw new Error('Course order not found');
 
       if (transaction_status !== courseOrder.midtransStatus && transaction_status !== null){
         courseOrder.midtransStatus = transaction_status
@@ -84,12 +84,10 @@ const courseOrderResolvers = {
   },
   Mutation: {
     async createCourseOrder(_,{courseCode}, context){
-
       const user = await User.findById(checkAuth(context).id)
       if (!user) throw new Error('User not registered')
 
       const course  = await Course.findOne({courseCode})
-
       if(!course){
         throw new Error('Course not found')
       }
@@ -111,7 +109,7 @@ const courseOrderResolvers = {
       const courseOrder = new CourseOrder({
         orderId: `${courseCode}${user.username}-${new Date().toISOString()}`,
         course: course._id,
-        amount: course.price,
+        amount: course.isDiscounted ? course.discountedPrice : course.price,
         user: user._id,
         midtransStatus: "pending",
         courseAccess: false,
