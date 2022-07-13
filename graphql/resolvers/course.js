@@ -139,8 +139,8 @@ const courseResolvers = {
         title,
         description,
         price,
-        discountedPrice,
         isDiscounted,
+        discountedPrice: isDiscounted ? discountedPrice : 10000,
         tutor: tutor._id,
         createdAt: new Date().toISOString()
       })
@@ -187,8 +187,10 @@ const courseResolvers = {
         course.title = title;
         course.description = description;
         course.price = price;
-        course.discountedPrice = discountedPrice;
         course.isDiscounted = isDiscounted;
+        if (isDiscounted){
+          course.discountedPrice = discountedPrice;
+        }
 
         if(tutor !== course.tutor.username){
           const newTutor = await User.findOne({username: tutor});
