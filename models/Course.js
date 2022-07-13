@@ -21,6 +21,8 @@ const courseSchema = new mongoose.Schema({
       }
     ], default: []},
   price: {type: Number, required: true},
+  discountedPrice: Number,
+  isDiscounted: {type: Boolean, required: true, default: false},
   createdAt: {type: String, required: true}
 })
 

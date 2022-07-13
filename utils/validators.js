@@ -58,29 +58,37 @@ export const validateLoginInput = (usernameEmail, password) => {
   }
 }
 
-export const validateCreateCourseInput = (title, courseCode, tutor, price, description) =>  {
+export const validateCreateCourseInput = (title, courseCode, tutor, price, discountedPrice, isDiscounted, description) =>  {
   const errors = {}
 
   if (title.length < 8 || title.length > 128){
-    errors.title = 'Title can only contain 8-128 string characters'
+    errors.title = 'Title can only contain 8-128 string characters';
   }
 
   if (courseCode !== courseCode.toUpperCase() || !courseCode.match(/^[a-zA-Z0-9]+$/)){
-    errors.courseCode = 'Course code must be uppercase alphanumeric'
+    errors.courseCode = 'Course code must be uppercase alphanumeric';
   }else if (courseCode.length > 10){
-    errors.courseCode = 'Course code can only contain max. 10 characters'
+    errors.courseCode = 'Course code can only contain max. 10 characters';
   }
 
   if (tutor.length < 4 || tutor.length > 16 || !tutor.match(/^[a-zA-Z0-9]+$/)){
-    errors.tutor = "Enter a valid tutor's username between 4-16 alphanumeric characters"
+    errors.tutor = "Enter a valid tutor's username between 4-16 alphanumeric characters";
   }
 
   if (price < 10000){
-    errors.price = 'Price must greater than or equal to 10000 rupiahs'
+    errors.price = 'Price must be greater than or equal to 10000 rupiahs';
+  }
+
+  if (isDiscounted){
+    if (discountedPrice < 10000){
+      errors.discountedPrice = 'Discounted price must be greater than or equal to 10000 rupiahs';
+    }else if (discountedPrice >= price){
+      errors.discountedPrice = 'Discounted price must be lower than the normal price';
+    }
   }
 
   if (description.length > 512){
-    errors.description = 'Description must be lower than 512 characters'
+    errors.description = 'Description must be lower than 512 characters';
   }
 
   return{
